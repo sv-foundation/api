@@ -14,8 +14,6 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v3
-      - name: stop docker-compose
-        run: docker-compose down
       - name: generate docker-compose config
         env:
            FONDY_KEY: ${{ secrets.FONDY_KEY }}
@@ -24,5 +22,7 @@ jobs:
            DEBUG: False
            ALLOWED_HOSTS: "0.0.0.0"
         run: envsubst < ./docker-compose-template.yaml > ./docker-compose.yaml
-      - name: run docker-compose
+      - name: stop docker-compose
+        run: docker-compose down
+      - name: start docker-compose
         run: docker-compose up -d --build
