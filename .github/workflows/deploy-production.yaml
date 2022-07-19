@@ -20,7 +20,7 @@ jobs:
            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
            SECRET_KEY: ${{ secrets.SECRET_KEY }}
            DEBUG: False
-           ALLOWED_HOSTS: "0.0.0.0"
+           ALLOWED_HOSTS: "*"
         run: envsubst < ./docker-compose-template.yaml > ./docker-compose.yaml
       - name: stop docker-compose
         run: docker-compose down
