@@ -25,7 +25,7 @@ services:
       - postgres
     environment:
       - SECRET_KEY=${SECRET_KEY}
-      - DEBUG=True
+      - DEBUG=${DEBUG}
       - DB_NAME=svfoundation_db
       - DB_HOST=postgres
       - DB_POST=5432
