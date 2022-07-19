@@ -1,6 +1,7 @@
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -31,3 +32,8 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
 class NewsTagsList(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = NewsTag.objects.all()
     serializer_class = NewsTagSerializer
+
+
+@api_view(['GET'])
+def health(request):
+    return Response('OK', status=200)
