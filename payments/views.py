@@ -36,12 +36,12 @@ class MakePayment(views.APIView):
         amount = data.get('amount')
         errors = {}
         if currency not in [currency[0] for currency in CURRENCIES_CHOICES]:
-            errors['currency'] = 'Invalid currency'
+            errors['currency'] = ['Invalid currency']
         coins = None
         try:
             coins = int(Decimal(amount) * 100)
             assert coins > 0
         except (InvalidOperation, ValueError, AssertionError):
-            errors['amount'] = 'Invalid amount'
+            errors['amount'] = ['Invalid amount']
         return {'currency': currency, 'amount': coins}, errors
 
