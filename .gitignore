@@ -108,3 +108,7 @@ static_collected
 
 # vscode
 .vscode
+
+# ci
+docker-compose.yaml
+

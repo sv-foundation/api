@@ -1,0 +1,28 @@
+name: deploy-production
+on:
+  push:
+    branches: [ "main" ]
+  #pull_request:
+  #  branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy-production:
+    runs-on: self-hosted
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      - name: generate docker-compose config
+        env:
+           FONDY_KEY: ${{ secrets.FONDY_KEY }}
+           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+           DEBUG: False
+           ALLOWED_HOSTS: "*"
+        run: envsubst < ./docker-compose-template.yaml > ./docker-compose.yaml
+      - name: stop docker-compose
+        run: docker-compose down
+      - name: start docker-compose
+        run: docker-compose up -d --build
