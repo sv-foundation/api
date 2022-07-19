@@ -9,6 +9,7 @@ from payments import views as payment_views
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('health/', news_views.health),
     path('news/', news_views.NewsViewSet.as_view({'get': 'list'})),
     path('news/<int:pk>', news_views.NewsViewSet.as_view({'get': 'retrieve'})),
     path('tags/', news_views.NewsTagsList.as_view({'get': 'list'})),
