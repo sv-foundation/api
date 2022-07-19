@@ -2,10 +2,10 @@ from .models import News, NewsTag
 from rest_framework import serializers
 
 
-class NewsTagSerializer(serializers.HyperlinkedModelSerializer):
+class NewsTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsTag
-        fields = ['name']
+        fields = ['slug', 'name']
 
 
 class NewsListSerializer(serializers.ModelSerializer):

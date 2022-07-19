@@ -14,7 +14,7 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = News.objects.all()
     ordering = ('-publication_date', 'id')
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['tags__name']
+    filterset_fields = ['tags__slug']
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
