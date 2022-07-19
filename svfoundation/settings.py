@@ -99,12 +99,12 @@ WSGI_APPLICATION = 'svfoundation.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
         'NAME': env('DB_NAME', default='svfoundation_db'),
         'USER': env('DB_USR', default='postgres'),
         'PASSWORD': env('DB_PWD', default='postgres'),
         'HOST': env('DB_HOST', default='127.0.0.1'),
-        'PORT': env('DB_PORT', default=5432)
+        'PORT': env('DB_PORT', default='5432')
     }
 
 }
