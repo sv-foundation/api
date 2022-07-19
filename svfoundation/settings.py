@@ -15,16 +15,21 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from cloudipsp import Api
 
+import environ
+# Initialise environment variables
+env = environ.Env()
+env.read_env()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True)
+DEBUG = env('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = []
 
@@ -95,11 +100,11 @@ WSGI_APPLICATION = 'svfoundation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'svfoundation_db'),
-        'USER': os.environ.get('DB_USR', 'postgres'),
-        'PASSWORD': os.environ['DB_PWD'],
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', '127.0.0.1')
+        'NAME': env('DB_NAME', default='svfoundation_db'),
+        'USER': env('DB_USR', default='postgres'),
+        'PASSWORD': env('DB_PWD', default='postgres'),
+        'HOST': env('DB_HOST', default='127.0.0.1'),
+        'PORT': env('DB_PORT', default=5432)
     }
 
 }
@@ -153,8 +158,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # fondy settings
-FONDY_MERCHANT_ID = int(os.environ.get('FONDY_MERCHANT_ID', '1396424'))
-FONDY_KEY = int(os.environ.get('FONDY_KEY', 'test'))
+FONDY_MERCHANT_ID = env('FONDY_MERCHANT_ID', cast=int, default='1396424')
+FONDY_KEY = env('FONDY_KEY', default='test')
 
 fondy_api = Api(merchant_id=FONDY_MERCHANT_ID,
                 secret_key=FONDY_KEY)
