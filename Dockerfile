@@ -1,5 +1,6 @@
 FROM python:3.10-buster
 # RUN apt-get update && apt-get -y upgrade && apt-get -y install build-essential cmake
+RUN python -m pip install gunicorn
 WORKDIR /app
 # COPY requirements/. requirements/
 COPY requirements.txt /app/
