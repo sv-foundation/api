@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
@@ -19,13 +20,11 @@ class NewsViewSet(viewsets.ReadOnlyModelViewSet):
             return NewsDetailsSerializer
         return NewsListSerializer
 
-    # def list(self, request, *args, **kwargs):
-    #     tag = request.query_params.get('tag')
-    #     if tag is not None:
-    #         queryset = self.queryset.filter(tags__name=tag)
-    #     news = queryset.order_by('-publication_date', 'id')
-    #     serializer = NewsSerializer(news, many=True, context={'request': request})
-    #     return Response(serializer.data)
+    def retrieve(self, request, *args, **kwargs):
+        slug = kwargs.get('slug')
+        news = get_object_or_404(self.queryset, slug=slug)
+        serializer = NewsDetailsSerializer(news)
+        return Response(serializer.data)
 
 
 class NewsTagsList(mixins.ListModelMixin, viewsets.GenericViewSet):

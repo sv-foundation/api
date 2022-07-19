@@ -12,3 +12,4 @@ class NewsTagAdmin(TranslationAdmin):
 @admin.register(News)
 class NewsAdmin(TranslationAdmin, SummernoteModelAdmin):
     summernote_fields = ('annotation', 'content')
+    prepopulated_fields = {"slug": ("title",)}

@@ -10,7 +10,7 @@ from payments import views as payment_views
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('news/', news_views.NewsViewSet.as_view({'get': 'list'})),
-    path('news/<int:pk>', news_views.NewsViewSet.as_view({'get': 'retrieve'})),
+    path('news/<str:slug>', news_views.NewsViewSet.as_view({'get': 'retrieve'})),
     path('tags/', news_views.NewsTagsList.as_view({'get': 'list'})),
     path('help_requests/', help_views.HelpRequestView.as_view()),
     path('fund_documents/', payment_views.FundDocumentsSet.as_view({'get': 'list'})),

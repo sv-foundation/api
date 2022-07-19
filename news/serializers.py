@@ -9,16 +9,14 @@ class NewsTagSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class NewsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = News
+        fields = ['slug', 'title', 'publication_date', 'annotation', 'preview_photo']
+
+
+class NewsDetailsSerializer(NewsListSerializer):
     tags = NewsTagSerializer(many=True)
 
     class Meta:
         model = News
-        fields = ['id', 'title', 'publication_date', 'annotation', 'preview_photo', 'tags']
-
-
-class NewsDetailsSerializer(serializers.ModelSerializer):
-    tags = NewsTagSerializer(many=True)
-
-    class Meta:
-        model = News
-        fields = ['id', 'title', 'publication_date', 'content', 'preview_photo', 'tags']
+        fields = NewsListSerializer.Meta.fields + ['content', 'tags']
