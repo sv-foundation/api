@@ -7,7 +7,7 @@ import django_extensions.db.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('news', '0002_news_annotation_news_annotation_en_and_more'),
+        ('news', '0001_initial'),
     ]
 
     operations = [
