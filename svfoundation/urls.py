@@ -16,6 +16,7 @@ urlpatterns = [
     path('help_requests/', help_views.HelpRequestView.as_view()),
     path('fund_documents/', payment_views.FundDocumentsSet.as_view({'get': 'list'})),
     path('payment_details/', payment_views.PaymentDetailsSet.as_view({'get': 'list'})),
+    path('payment_details/<str:pk>', payment_views.PaymentDetailsSet.as_view({'get': 'retrieve'})),
     path('make_payment/', payment_views.MakePayment.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('summernote/', include('django_summernote.urls')),

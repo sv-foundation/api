@@ -8,6 +8,12 @@ class FundDocumentSerializer(serializers.ModelSerializer):
         fields = ('name', 'file')
 
 
+class CurrencyListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentDetails
+        fields = ('currency_code',)
+
+
 class PaymentDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentDetails
