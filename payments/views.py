@@ -24,25 +24,24 @@ class MakePayment(views.APIView):
     def post(self, request, format=None):
         checkout = Checkout(api=settings.fondy_api)
         data = request.data
-        try:
-            validated_data = self.validate(data)
-        except ValueError as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
-        print(data)
+        validated_data, errors = self.validate(data)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         res = checkout.url(validated_data)
         url = res.get('checkout_url')
         return Response({'checkout_url': url})
 
-    def validate(self, data):
+    def validate(self, data) -> (dict, dict):
         currency = data.get('currency')
-        print(currency)
         amount = data.get('amount')
+        errors = {}
         if currency not in [currency[0] for currency in CURRENCIES_CHOICES]:
-            raise ValueError('Not valid currency')
+            errors['currency'] = 'Invalid currency'
+        coins = None
         try:
             coins = int(Decimal(amount) * 100)
             assert coins > 0
         except (InvalidOperation, ValueError, AssertionError):
-            raise ValueError('Incorrect amount')
-        return {'currency': currency, 'amount': coins}
+            errors['amount'] = 'Invalid amount'
+        return {'currency': currency, 'amount': coins}, errors
 
