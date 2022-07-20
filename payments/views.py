@@ -6,8 +6,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, views, status
 
 from svfoundation import settings
-from .models import FundDocument, PaymentDetails, CURRENCIES_CHOICES
-from .serializers import FundDocumentSerializer, PaymentDetailsSerializer
+from .models import FundDocument, PaymentDetails, PaymentSystem
+from .serializers import (
+    FundDocumentSerializer, PaymentDetailsSerializer, PaymentSystemListSerializer,
+    PaymentSystemSerializer
+)
 
 
 class FundDocumentsSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -20,29 +23,38 @@ class PaymentDetailsSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PaymentDetailsSerializer
 
 
-class MakePayment(views.APIView):
+class PaymentSystemsSet(viewsets.ReadOnlyModelViewSet):
+    queryset = PaymentSystem.objects.filter(is_visible=True)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return PaymentSystemSerializer
+        return PaymentSystemListSerializer
+
+
+class MakeFondyPayment(views.APIView):
     def post(self, request, format=None):
         checkout = Checkout(api=settings.fondy_api)
         data = request.data
-        try:
-            validated_data = self.validate(data)
-        except ValueError as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
-        print(data)
+        validated_data, errors = self.validate(data)
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         res = checkout.url(validated_data)
         url = res.get('checkout_url')
         return Response({'checkout_url': url})
 
-    def validate(self, data):
+    def validate(self, data) -> (dict, dict):
         currency = data.get('currency')
-        print(currency)
         amount = data.get('amount')
-        if currency not in [currency[0] for currency in CURRENCIES_CHOICES]:
-            raise ValueError('Not valid currency')
+        errors = {}
+        fondy_system = PaymentSystem.objects.get('FONDY')
+        allowed_currencies = [currency.name for currency in fondy_system.currencies]
+        if currency not in allowed_currencies:
+            errors['currency'] = ['Invalid currency']
+        coins = None
         try:
             coins = int(Decimal(amount) * 100)
             assert coins > 0
         except (InvalidOperation, ValueError, AssertionError):
-            raise ValueError('Incorrect amount')
-        return {'currency': currency, 'amount': coins}
-
+            errors['amount'] = ['Invalid amount']
+        return {'currency': currency, 'amount': coins}, errors

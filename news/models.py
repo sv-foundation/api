@@ -5,6 +5,7 @@ from django_extensions.db.models import TimeStampedModel
 
 
 class NewsTag(TimeStampedModel):
+    slug = models.SlugField(max_length=255, unique=True)
     name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
@@ -14,6 +15,7 @@ class NewsTag(TimeStampedModel):
 class News(TimeStampedModel):
     preview_photo = models.ImageField(upload_to='previews/%Y-%m-%d/', help_text='Photo that displayed in news list')
     title = models.CharField(max_length=255, null=False)
+    slug = models.SlugField(max_length=255, unique=True)
     publication_date = models.DateField(default=date.today)
     annotation = models.TextField(null=False)
     content = models.TextField(null=False)
