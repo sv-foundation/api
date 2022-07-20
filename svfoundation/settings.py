@@ -32,7 +32,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', cast=bool, default=True)
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=[])
+ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=['*'])
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Application definition
 
@@ -49,29 +50,35 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'django_summernote',
+    'corsheaders',
     'news',
     'help',
     'payments'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ROOT_URLCONF = 'svfoundation.urls'
@@ -152,8 +159,8 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 #STATIC_URL = 'static/'
-STATIC_URL: str = '/staticfiles/'
-STATIC_ROOT: str = join(BASE_DIR, 'staticfiles')
+STATIC_URL: str = '/static/'
+STATIC_ROOT: str = join(BASE_DIR, 'static/')
 MEDIA_URL: str = '/media/'
 MEDIA_ROOT: str = join(BASE_DIR, 'media')
 
@@ -161,6 +168,8 @@ MEDIA_ROOT: str = join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+APPEND_SLASH = True
 
 # fondy settings
 FONDY_MERCHANT_ID = env('FONDY_MERCHANT_ID', cast=int, default='1396424')
