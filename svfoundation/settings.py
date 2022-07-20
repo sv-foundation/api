@@ -33,6 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=['*'])
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Application definition
 
@@ -58,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
