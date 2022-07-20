@@ -6,8 +6,11 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, views, status
 
 from svfoundation import settings
-from .models import FundDocument, PaymentDetails, CURRENCIES_CHOICES
-from .serializers import FundDocumentSerializer, PaymentDetailsSerializer, CurrencyListSerializer
+from .models import FundDocument, PaymentDetails, PaymentSystem
+from .serializers import (
+    FundDocumentSerializer, PaymentDetailsSerializer, PaymentDetailsListSerializer, PaymentSystemListSerializer,
+    PaymentSystemSerializer
+)
 
 
 class FundDocumentsSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -17,15 +20,23 @@ class FundDocumentsSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class PaymentDetailsSet(viewsets.ReadOnlyModelViewSet):
     queryset = PaymentDetails.objects.filter(is_visible=True).all()
-    serializer_class = PaymentDetailsSerializer
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return PaymentDetailsSerializer
-        return CurrencyListSerializer
+        return PaymentDetailsListSerializer
 
 
-class MakePayment(views.APIView):
+class PaymentSystemsSet(viewsets.ReadOnlyModelViewSet):
+    queryset = PaymentSystem.objects.filter(is_visible=True)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return PaymentSystemSerializer
+        return PaymentSystemListSerializer
+
+
+class MakeFondyPayment(views.APIView):
     def post(self, request, format=None):
         checkout = Checkout(api=settings.fondy_api)
         data = request.data
@@ -40,7 +51,9 @@ class MakePayment(views.APIView):
         currency = data.get('currency')
         amount = data.get('amount')
         errors = {}
-        if currency not in [currency[0] for currency in CURRENCIES_CHOICES]:
+        fondy_system = PaymentSystem.objects.get('FONDY')
+        allowed_currencies = [currency.name for currency in fondy_system.currencies]
+        if currency not in allowed_currencies:
             errors['currency'] = ['Invalid currency']
         coins = None
         try:
@@ -49,4 +62,3 @@ class MakePayment(views.APIView):
         except (InvalidOperation, ValueError, AssertionError):
             errors['amount'] = ['Invalid amount']
         return {'currency': currency, 'amount': coins}, errors
-

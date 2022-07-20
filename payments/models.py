@@ -2,20 +2,11 @@ from django.db import models
 from django_extensions.db.models import TimeStampedModel
 from currencies import Currency
 
-
 CURRENCIES_CHOICES = [(code, code) for code in Currency.money_formats.keys()]  # [(UAH, UAH), (USD, USD), ...]
 
 
 class PaymentDetails(TimeStampedModel):
-    currency_code = models.CharField(max_length=5, choices=CURRENCIES_CHOICES, default='UAH', primary_key=True)
-    address = models.CharField(max_length=255, null=True)
-    card_number = models.CharField(max_length=20, null=True, blank=True)
-    iban = models.CharField('IBAN', max_length=40)
-    bic = models.CharField('BIC', max_length=20, null=True, blank=True)
-    fund_name = models.CharField(max_length=255, null=True, blank=True)
-    bank = models.CharField(max_length=255, null=True, blank=True)
-    corespondent_banks = models.TextField(null=True, blank=True)
-    payment_purpose = models.CharField(max_length=255, null=True, blank=True)
+    currency_code = models.CharField(max_length=10, primary_key=True)
     is_visible = models.BooleanField(null=False, default=True, help_text='Is visible on website')
 
     class Meta:
@@ -23,6 +14,34 @@ class PaymentDetails(TimeStampedModel):
 
     def __str__(self):
         return self.currency_code
+
+
+class PaymentDetailsField(TimeStampedModel):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    value = models.CharField(max_length=255)
+    payment_details = models.ForeignKey(PaymentDetails, on_delete=models.CASCADE, related_name='fields')
+
+    def __str__(self):
+        return self.name or self.value
+
+
+class PaymentSystemCurrency(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+
+    def __str__(self):
+        return self.name
+
+
+class PaymentSystem(TimeStampedModel):
+    NAMES = (
+        ('FONDY', 'Fondy'),
+    )
+    name = models.CharField(max_length=255, choices=NAMES, default='FONDY', primary_key=True)
+    is_visible = models.BooleanField(null=False, default=True, help_text='Is visible on website')
+    currencies = models.ManyToManyField(PaymentSystemCurrency)
+
+    def __str__(self):
+        return self.name
 
 
 class FundDocument(TimeStampedModel):
