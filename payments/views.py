@@ -8,7 +8,7 @@ from rest_framework import viewsets, mixins, views, status
 from svfoundation import settings
 from .models import FundDocument, PaymentDetails, PaymentSystem
 from .serializers import (
-    FundDocumentSerializer, PaymentDetailsSerializer, PaymentDetailsListSerializer, PaymentSystemListSerializer,
+    FundDocumentSerializer, PaymentDetailsSerializer, PaymentSystemListSerializer,
     PaymentSystemSerializer
 )
 
@@ -20,11 +20,7 @@ class FundDocumentsSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class PaymentDetailsSet(viewsets.ReadOnlyModelViewSet):
     queryset = PaymentDetails.objects.filter(is_visible=True).all()
-
-    def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return PaymentDetailsSerializer
-        return PaymentDetailsListSerializer
+    serializer_class = PaymentDetailsSerializer
 
 
 class PaymentSystemsSet(viewsets.ReadOnlyModelViewSet):

@@ -14,12 +14,6 @@ class PaymentDetailsFieldSerializer(serializers.ModelSerializer):
         fields = ('name', 'value')
 
 
-class PaymentDetailsListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PaymentDetails
-        fields = ('currency_code',)
-
-
 class PaymentDetailsSerializer(serializers.ModelSerializer):
     fields = PaymentDetailsFieldSerializer(many=True)
 
