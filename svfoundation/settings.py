@@ -157,8 +157,8 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 #STATIC_URL = 'static/'
-STATIC_URL: str = '/staticfiles/'
-STATIC_ROOT: str = join(BASE_DIR, 'staticfiles')
+STATIC_URL: str = '/static/'
+STATIC_ROOT: str = join(BASE_DIR, 'static/')
 MEDIA_URL: str = '/media/'
 MEDIA_ROOT: str = join(BASE_DIR, 'media')
 
