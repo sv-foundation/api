@@ -35,7 +35,11 @@ class PaymentSystemListSerializer(serializers.ModelSerializer):
 
 
 class PaymentSystemSerializer(serializers.ModelSerializer):
-    currencies = PaymentSystemCurrencySerializer(many=True)
+    currencies = serializers.SerializerMethodField()
+
+    def get_currencies(self, obj):
+        currencies = obj.currencies.all().order_by('order')
+        return PaymentSystemCurrencySerializer(currencies, many=True).data
 
     class Meta:
         model = PaymentSystem
