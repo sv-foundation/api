@@ -70,6 +70,7 @@ MIDDLEWARE = [
 ]
 
 
+CSRF_TRUSTED_ORIGINS = ['https://*.mydomain.combeta.svfoundation.org.ua', 'https://*.127.0.0.1']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
