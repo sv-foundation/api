@@ -180,3 +180,12 @@ FONDY_KEY = env('FONDY_KEY', default='test')
 
 fondy_api = Api(merchant_id=FONDY_MERCHANT_ID,
                 secret_key=FONDY_KEY)
+
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'styleTags': [
+            'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            {'title': "Gallery", 'tag': "div", 'value': "div", 'className': "gallery"}
+        ],
+    }
+}
