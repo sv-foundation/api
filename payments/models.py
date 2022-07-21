@@ -16,7 +16,7 @@ class PaymentDetails(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            last_order = self.objects.all().aggregate(largest=models.Max('order'))['largest']
+            last_order = PaymentDetails.objects.aggregate(largest=models.Max('order'))['largest']
             if last_order is not None:
                 self.order = last_order + 1
         super(PaymentDetails, self).save(*args, **kwargs)
@@ -44,7 +44,7 @@ class PaymentSystemCurrency(models.Model):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            last_order = self.objects.all().aggregate(largest=models.Max('order'))['largest']
+            last_order = PaymentSystemCurrency.objects.aggregate(largest=models.Max('order'))['largest']
             if last_order is not None:
                 self.order = last_order + 1
         super(PaymentSystemCurrency, self).save(*args, **kwargs)
