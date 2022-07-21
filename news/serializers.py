@@ -1,3 +1,5 @@
+from bs4 import BeautifulSoup
+
 from svfoundation import settings
 from .models import News, NewsTag
 from rest_framework import serializers
@@ -25,8 +27,13 @@ class NewsDetailsSerializer(serializers.ModelSerializer):
         return urljoin(settings.API_URL, obj.preview_photo.url)
 
     def get_content(self, obj):
-        # TODO make it more clear
-        return obj.content.replace('/media/django-summernote', f'{settings.API_URL}/media/django-summernote')
+        content = obj.content
+        soup = BeautifulSoup(content, "html.parser")
+        for tag in soup():
+            del tag['style']
+        for img in soup.find_all('img'):
+            img['src'] = urljoin(settings.API_URL, img['src'])
+        return str(soup)
 
     class Meta:
         model = News
