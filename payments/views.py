@@ -47,8 +47,11 @@ class MakeFondyPayment(views.APIView):
         currency = data.get('currency')
         amount = data.get('amount')
         errors = {}
-        fondy_system = PaymentSystem.objects.get('FONDY')
-        allowed_currencies = [currency.name for currency in fondy_system.currencies]
+        fondy_system = PaymentSystem.objects.get(name='FONDY')
+        if not fondy_system:
+            errors['error'] = ['Payment system not exists']
+            return {}, errors
+        allowed_currencies = [currency.name for currency in fondy_system.currencies.all()]
         if currency not in allowed_currencies:
             errors['currency'] = ['Invalid currency']
         coins = None
