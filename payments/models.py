@@ -8,9 +8,18 @@ CURRENCIES_CHOICES = [(code, code) for code in Currency.money_formats.keys()]  #
 class PaymentDetails(TimeStampedModel):
     currency_code = models.CharField(max_length=10, primary_key=True)
     is_visible = models.BooleanField(null=False, default=True, help_text='Is visible on website')
+    order = models.IntegerField(null=False, blank=True, default=1)
 
     class Meta:
         verbose_name_plural = 'payment details'
+        ordering = ['order', '-created']
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            last_order = self.objects.all().aggregate(largest=models.Max('order'))['largest']
+            if last_order is not None:
+                self.order = last_order + 1
+        super(PaymentDetails, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.currency_code
@@ -27,6 +36,18 @@ class PaymentDetailsField(TimeStampedModel):
 
 class PaymentSystemCurrency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
+    order = models.IntegerField(null=False, blank=True, default=1)
+
+    class Meta:
+        verbose_name_plural = 'payment system currencies'
+        ordering = ['order']
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            last_order = self.objects.all().aggregate(largest=models.Max('order'))['largest']
+            if last_order is not None:
+                self.order = last_order + 1
+        super(PaymentSystemCurrency, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
