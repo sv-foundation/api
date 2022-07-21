@@ -34,6 +34,8 @@ services:
       - FONDY_MERCHANT_ID=1504162
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    volumes:
+      - ~/api-media:/app/media
     entrypoint: ["/app/entrypoint.sh"]
 
 
