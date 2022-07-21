@@ -34,7 +34,7 @@ services:
       - FONDY_MERCHANT_ID=1504162
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - API_URL=https://api.beta.svfoundation.com
+      - API_URL=https://api.beta.svfoundation.org.ua/
     volumes:
       - ~/api-media:/app/media
     entrypoint: ["/app/entrypoint.sh"]
