@@ -17,6 +17,7 @@ from pathlib import Path
 from cloudipsp import Api
 
 import environ
+
 # Initialise environment variables
 env = environ.Env()
 env.read_env()
@@ -34,7 +35,6 @@ DEBUG = env('DEBUG', cast=bool, default=True)
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=['*'])
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 API_URL = env('API_URL', default='http://127.0.0.1:8000')
 # Application definition
@@ -71,11 +71,9 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-
 CSRF_TRUSTED_ORIGINS = ['https://*.beta.svfoundation.org.ua', 'https://*.127.0.0.1']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -161,9 +159,12 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-#STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 STATIC_URL: str = '/static/'
 STATIC_ROOT: str = join(BASE_DIR, 'static/')
+STATICFILES_DIRS = (
+    BASE_DIR / "summernote_static",
+)
 MEDIA_URL: str = '/media/'
 MEDIA_ROOT: str = join(BASE_DIR, 'media')
 
@@ -185,7 +186,12 @@ SUMMERNOTE_CONFIG = {
     'summernote': {
         'styleTags': [
             'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-            {'title': "Gallery", 'tag': "div", 'value': "div", 'className': "gallery"}
+            {'title': "Gallery", 'tag': "div", 'value': "div", 'className': "gallery"},
+            {'title': "Gallery Item", 'tag': "div", 'value': "div", 'className': "galleryItem"},
         ],
-    }
+    },
+    'css': (
+        '/static/css/summernote_gallery.css',
+    )
+
 }
