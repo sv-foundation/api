@@ -13,6 +13,9 @@ class NewsTag(TimeStampedModel):
 
 
 class News(TimeStampedModel):
+    main_photo = models.ImageField(upload_to='main_photos/%Y-%m-%d/',
+                                   help_text='Photo that displayed in top of news page',
+                                   null=True, blank=False)
     preview_photo = models.ImageField(upload_to='previews/%Y-%m-%d/', help_text='Photo that displayed in news list')
     title = models.CharField(max_length=255, null=False)
     slug = models.SlugField(max_length=255, unique=True)
