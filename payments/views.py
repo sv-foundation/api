@@ -99,5 +99,5 @@ def check_country(request):
         else:
             language = 'en'
     else:
-        return Response("Coudn't get country from IP", status=400)
+        return Response(f"Coudn't get country from IP: {ip}", status=400)
     return Response({'country': country_code, 'language': language}, status=200)
