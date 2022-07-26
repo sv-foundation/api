@@ -193,5 +193,4 @@ SUMMERNOTE_CONFIG = {
     'css': (
         '/static/css/summernote_gallery.css',
     )
-
 }

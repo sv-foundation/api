@@ -20,11 +20,11 @@ class NewsListSerializer(serializers.ModelSerializer):
 
 class NewsDetailsSerializer(serializers.ModelSerializer):
     tags = NewsTagSerializer(many=True)
-    preview_photo = serializers.SerializerMethodField()
+    main_photo = serializers.SerializerMethodField()
     content = serializers.SerializerMethodField()
 
-    def get_preview_photo(self, obj):
-        return urljoin(settings.API_URL, obj.preview_photo.url)
+    def get_main_photo(self, obj):
+        return urljoin(settings.API_URL, (obj.main_photo or obj.preview_photo).url)
 
     def get_content(self, obj):
         content = obj.content
@@ -37,5 +37,5 @@ class NewsDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ['slug', 'title', 'publication_date', 'annotation', 'preview_photo', 'content', 'tags']
+        fields = ['slug', 'title', 'publication_date', 'annotation', 'main_photo', 'content', 'tags']
 
