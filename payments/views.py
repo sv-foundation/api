@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, mixins, views, status
 
 from svfoundation import settings
-from svfoundation.utils import get_country_by_ip, get_country_currencies
+from svfoundation.utils import get_country_by_ip, get_country_currencies, get_client_ip
 from .models import FundDocument, PaymentDetails, PaymentSystem
 from .serializers import (
     FundDocumentSerializer, PaymentDetailsSerializer, PaymentSystemListSerializer,
@@ -83,7 +83,7 @@ class MakeFondyPayment(views.APIView):
 
 @api_view(['GET'])
 def check_country(request):
-    ip = request.META.get('REMOTE_ADDR', None)
+    ip = get_client_ip(request)
     if not ip:
         return Response("Coudn't get REMOTE_ADDR", status=400)
     country_code = get_country_by_ip(ip)
@@ -99,5 +99,5 @@ def check_country(request):
         else:
             language = 'en'
     else:
-        return Response("Coudn't get country from IP", status=400)
+        return Response(f"Coudn't get country from IP: {ip}", status=400)
     return Response({'country': country_code, 'language': language}, status=200)
