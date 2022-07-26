@@ -2,10 +2,15 @@ import json
 from decimal import Decimal, InvalidOperation
 
 from cloudipsp import Checkout
+from countryinfo import CountryInfo
+from django.db.models import Case, When, Value, IntegerField
+from django.db.models.functions import Upper
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, views, status
 
 from svfoundation import settings
+from svfoundation.utils import get_country_by_ip, get_country_currencies
 from .models import FundDocument, PaymentDetails, PaymentSystem
 from .serializers import (
     FundDocumentSerializer, PaymentDetailsSerializer, PaymentSystemListSerializer,
@@ -21,6 +26,19 @@ class FundDocumentsSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class PaymentDetailsSet(viewsets.ReadOnlyModelViewSet):
     queryset = PaymentDetails.objects.filter(is_visible=True).all()
     serializer_class = PaymentDetailsSerializer
+
+    def get_queryset(self):
+        country_code = self.request.session.get('country_code')
+        country_currencies = []
+        if country_code:
+            country_currencies = get_country_currencies(country_code)
+        return PaymentDetails.objects.filter(is_visible=True).annotate(
+            currency_code_upper=Upper('currency_code')
+        ).annotate(custom_order=Case(
+            When(currency_code_upper__in=country_currencies, then=Value(0)),
+            default=Value(1),
+            output_field=IntegerField(),
+        )).order_by('custom_order', 'order', '-created')
 
 
 class PaymentSystemsSet(viewsets.ReadOnlyModelViewSet):
@@ -61,3 +79,25 @@ class MakeFondyPayment(views.APIView):
         except (InvalidOperation, ValueError, AssertionError):
             errors['amount'] = ['Invalid amount']
         return {'currency': currency, 'amount': coins}, errors
+
+
+@api_view(['GET'])
+def check_country(request):
+    ip = request.META.get('REMOTE_ADDR', None)
+    if not ip:
+        return Response("Coudn't get REMOTE_ADDR", status=400)
+    country_code = get_country_by_ip(ip)
+    if country_code:
+        request.session['country_code'] = country_code
+        supported_languages = [lang[0] for lang in settings.LANGUAGES]
+        country_languages = CountryInfo(country_code).languages()
+        suitable_languages = list(set(supported_languages).intersection(set(country_languages)))
+        if suitable_languages:
+            language = suitable_languages[0]
+        elif country_code.lower() == 'ua':
+            language = 'uk'
+        else:
+            language = 'en'
+    else:
+        return Response("Coudn't get country from IP", status=400)
+    return Response({'country': country_code, 'language': language}, status=200)
