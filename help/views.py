@@ -24,6 +24,7 @@ class HelpRequestView(APIView):
 
     def post(self, request, format=None):
         files = request.FILES.getlist('file', None)
+        files_copy = deepcopy(files)
         data = deepcopy(request.data)
         if 'file' in data:
             del data['file']
@@ -41,7 +42,7 @@ class HelpRequestView(APIView):
                                     msg,
                                     settings.EMAIL_HOST_USER,
                                     settings.HELP_EMAIL_RECIPIENTS)
-                for file in files or []:
+                for file in files_copy:
                     mail.attach(file.name, file.read(), file.content_type)
                 mail.send(fail_silently=False)
             except Exception as e:
