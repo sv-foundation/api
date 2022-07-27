@@ -38,13 +38,13 @@ class HelpRequestView(APIView):
             print(msg)
             try:
                 mail = EmailMessage('Потребую допомоги - з форми на сторінці '
-                                            'https://beta.svfoundation.org.ua/potrebuiu-dopomohy',
+                                    'https://beta.svfoundation.org.ua/potrebuiu-dopomohy',
                                     msg,
                                     settings.EMAIL_HOST_USER,
                                     settings.HELP_EMAIL_RECIPIENTS)
                 for file in files or []:
                     mail.attach(file.name, file.read(), file.content_type)
-                mail.send()
+                mail.send(fail_silently=False)
             except Exception as e:
                 return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)  # NOQA
