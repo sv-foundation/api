@@ -30,13 +30,12 @@ class HelpRequestView(APIView):
         serializer = HelpRequestSerializer(data=data, context={'documents': files})
         if serializer.is_valid():
             serializer.save()
-            msg = HELP_TEMPLATE.format(full_name=serializer.data['full_name'],
-                                       organization_name=serializer.data['organization_name'],
-                                       email=serializer.data['email'],
-                                       phone_number=serializer.data['phone_number'],
-                                       message=serializer.data['message'])
-            print(msg)
             try:
+                msg = HELP_TEMPLATE.format(full_name=serializer.data['full_name'],
+                                           organization_name=serializer.data['organization_name'],
+                                           email=serializer.data['email'],
+                                           phone_number=serializer.data['phone_number'],
+                                           message=serializer.data['message'])
                 mail = EmailMessage('Потребую допомоги - з форми на сторінці '
                                     'https://beta.svfoundation.org.ua/potrebuiu-dopomohy',
                                     msg,
