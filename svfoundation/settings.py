@@ -182,6 +182,15 @@ FONDY_KEY = env('FONDY_KEY', default='test')
 fondy_api = Api(merchant_id=FONDY_MERCHANT_ID,
                 secret_key=FONDY_KEY)
 
+# email config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env('EMAIL_HOST_USR')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PWD')
+EMAIL_TIMEOUT = 180
+
 SUMMERNOTE_CONFIG = {
     'summernote': {
         'styleTags': [

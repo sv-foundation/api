@@ -1,7 +1,7 @@
 name: deploy-production
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/help_email" ]
   #pull_request:
   #  branches: [ "main" ]
 
@@ -19,6 +19,7 @@ jobs:
            FONDY_KEY: ${{ secrets.FONDY_KEY }}
            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+           EMAIL_HOST_PWD: ${{ secrets.EMAIL_HOST_PWD }}
            DEBUG: False
            ALLOWED_HOSTS: "*"
         run: envsubst < ./docker-compose-template.yaml > ./docker-compose.yaml
