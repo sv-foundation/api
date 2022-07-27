@@ -191,6 +191,8 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USR')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PWD')
 EMAIL_TIMEOUT = 180
 
+HELP_EMAIL_RECIPIENTS = ['sashayak2203@gmail.com']
+
 SUMMERNOTE_CONFIG = {
     'summernote': {
         'styleTags': [
