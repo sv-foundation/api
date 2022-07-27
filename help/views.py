@@ -29,10 +29,13 @@ class HelpRequestView(APIView):
         serializer = HelpRequestSerializer(data=data, context={'documents': files})
         if serializer.is_valid():
             serializer.save()
-            send_mail(subject='Help request',
-                      message='Test',
-                      from_email=settings.EMAIL_HOST_USER,
-                      recipient_list=['sashayak2203@gmail.com'])
+            try:
+                send_mail(subject='Help request',
+                          message='Test',
+                          from_email=settings.EMAIL_HOST_USER,
+                          recipient_list=['sashayak2203@gmail.com'])
+            except Exception as e:
+                return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)  # NOQA
         else:
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
