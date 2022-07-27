@@ -1,3 +1,5 @@
+import base64
+import binascii
 from copy import deepcopy
 
 from django.core.mail import send_mail, EmailMessage
@@ -11,7 +13,7 @@ from help.mail_templates.txt_template import HELP_TEMPLATE
 from help.models import HelpRequest
 from help.serializers import HelpRequestSerializer
 from svfoundation import settings
-import asyncio
+from help.tasks import send_help_email
 
 
 class HelpRequestView(APIView):
@@ -24,12 +26,15 @@ class HelpRequestView(APIView):
 
     def post(self, request, format=None):
         files = request.FILES.getlist('file', None)
-        files_copy = deepcopy(files)
-        data = deepcopy(request.data)
+        data = request.data
         if 'file' in data:
             del data['file']
         serializer = HelpRequestSerializer(data=data, context={'documents': files})
         if serializer.is_valid():
+            files_data = []
+            for file in files:
+                files_data.append((file.name, (binascii.hexlify(file.read())).decode(), file.content_type))
+
             serializer.save()
             try:
                 msg = HELP_TEMPLATE.format(full_name=serializer.data['full_name'],
@@ -37,14 +42,7 @@ class HelpRequestView(APIView):
                                            email=serializer.data['email'],
                                            phone_number=serializer.data['phone_number'],
                                            message=serializer.data['message'])
-                mail = EmailMessage('Потребую допомоги - з форми на сторінці '
-                                    'https://beta.svfoundation.org.ua/potrebuiu-dopomohy',
-                                    msg,
-                                    settings.EMAIL_HOST_USER,
-                                    settings.HELP_EMAIL_RECIPIENTS)
-                for file in files_copy:
-                    mail.attach(file.name, file.read(), file.content_type)
-                mail.send(fail_silently=False)
+                send_help_email.apply_async(kwargs={'message': msg, 'files_data': files_data})
             except Exception as e:
                 return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)  # NOQA

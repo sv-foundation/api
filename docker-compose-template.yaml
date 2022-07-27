@@ -40,6 +40,33 @@ services:
     volumes:
       - ~/api-media:/app/media
     entrypoint: ["/app/entrypoint.sh"]
+  redis:
+    image: redis:alpine
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A svfoundation worker -l info
+#    volumes:
+#      - ./app:/app
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DB_NAME=svfoundation_db
+      - DB_HOST=postgres
+      - DB_POST=5432
+      - DB_USR=postgres
+      - DB_PWD=${POSTGRES_PASSWORD}
+      - FONDY_MERCHANT_ID=1504162
+      - FONDY_KEY=${FONDY_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - API_URL=https://api.beta.svfoundation.org.ua/
+      - EMAIL_HOST_USR=sidealex6@gmail.com
+      - EMAIL_HOST_PWD=${EMAIL_HOST_PWD}
+    depends_on:
+      - postgres
+      - redis
+      - api
 
 
 
