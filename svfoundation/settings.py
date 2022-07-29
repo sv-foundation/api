@@ -191,23 +191,19 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USR')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PWD')
 EMAIL_TIMEOUT = 180
 
-HELP_EMAIL_RECIPIENTS = ['sashayak2203@gmail.com']
+HELP_EMAIL_RECIPIENTS = ['info@svfoundation.org.ua', 'dianadaieva@gmail.com', 'alexkarn@gmail.com']
 
 # celery
-# REDIS_HOST = 'localhost'
-# REDIS_PORT = '6379'
-# BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-# BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-# CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-CELERY_BROKER_URL = "redis://redis:6379/0"
-CELERY_RESULT_BACKEND = "redis://redis:6379/0"
+REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:6379/0'
 
 SUMMERNOTE_CONFIG = {
     'summernote': {
         'styleTags': [
             'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-            {'title': "Gallery", 'tag': "div", 'value': "div", 'className': "gallery"},
-            {'title': "Gallery Item", 'tag': "div", 'value': "div", 'className': "galleryItem"},
+            {'title': 'Gallery', 'tag': 'div', 'value': 'div', 'className': 'gallery'},
+            {'title': 'Gallery Item', 'tag': 'div', 'value': 'div', 'className': 'galleryItem'},
         ],
     },
     'css': (

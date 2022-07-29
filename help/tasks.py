@@ -16,5 +16,4 @@ def send_help_email(message, files_data):
     for file_data in files_data:
         name, content, content_type = file_data
         mail.attach(name, binascii.unhexlify(content.encode()), content_type)
-        # mail.attach(file.name, file.read(), file.content_type)
     mail.send(fail_silently=False)
