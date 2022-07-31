@@ -29,3 +29,4 @@ beautifulsoup4==4.11.1
 countryinfo==0.1.2
 celery==5.2.7
 redis==4.3.4
+unidecode
