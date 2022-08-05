@@ -35,6 +35,7 @@ services:
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - API_URL=https://api.beta.svfoundation.org.ua/
+      - WEBSITE_URL=https://beta.svfoundation.org.ua/
       - EMAIL_HOST_USR=svfoundationhelp@gmail.com
       - EMAIL_HOST_PWD=${EMAIL_HOST_PWD}
     volumes:
@@ -61,6 +62,7 @@ services:
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - API_URL=https://api.beta.svfoundation.org.ua/
+      - WEBSITE_URL=https://beta.svfoundation.org.ua/
       - EMAIL_HOST_USR=svfoundationhelp@gmail.com
       - EMAIL_HOST_PWD=${EMAIL_HOST_PWD}
     depends_on:

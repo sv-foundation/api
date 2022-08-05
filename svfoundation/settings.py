@@ -36,6 +36,7 @@ DEBUG = env('DEBUG', cast=bool, default=True)
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=['*'])
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+WEBSITE_URL = env('WEBSITE_URL', default='http://127.0.0.1:3000')
 API_URL = env('API_URL', default='http://127.0.0.1:8000')
 # Application definition
 

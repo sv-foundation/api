@@ -8,8 +8,8 @@ from svfoundation.celery import app
 
 @app.task
 def send_help_email(message, files_data):
-    mail = EmailMessage('Потребую допомоги - з форми на сторінці '
-                        'https://beta.svfoundation.org.ua/potrebuiu-dopomohy',
+    mail = EmailMessage(f'Потребую допомоги - з форми на сторінці '
+                        f'{settings.WEBSITE_URL}potrebuiu-dopomohy',
                         message,
                         settings.EMAIL_HOST_USER,
                         settings.HELP_EMAIL_RECIPIENTS)
