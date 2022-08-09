@@ -4,6 +4,7 @@ services:
     image: postgres:12
     container_name: postgres
     hostname: postgres
+    restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -35,13 +36,17 @@ services:
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - API_URL=https://api.beta.svfoundation.org.ua/
+      - WEBSITE_URL=https://beta.svfoundation.org.ua/
       - EMAIL_HOST_USR=svfoundationhelp@gmail.com
       - EMAIL_HOST_PWD=${EMAIL_HOST_PWD}
     volumes:
       - ~/api-media:/app/media
     entrypoint: ["/app/entrypoint.sh"]
+  
   redis:
     image: redis:alpine
+    restart: always
+  
   celery:
     restart: always
     build:
@@ -61,6 +66,7 @@ services:
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - API_URL=https://api.beta.svfoundation.org.ua/
+      - WEBSITE_URL=https://beta.svfoundation.org.ua/
       - EMAIL_HOST_USR=svfoundationhelp@gmail.com
       - EMAIL_HOST_PWD=${EMAIL_HOST_PWD}
     depends_on:
