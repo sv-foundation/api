@@ -36,6 +36,7 @@ DEBUG = env('DEBUG', cast=bool, default=True)
 ALLOWED_HOSTS = env('ALLOWED_HOSTS', cast=list, default=['*'])
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+WEBSITE_URL = env('WEBSITE_URL', default='http://127.0.0.1:3000')
 API_URL = env('API_URL', default='http://127.0.0.1:8000')
 # Application definition
 
@@ -71,7 +72,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://*.beta.svfoundation.org.ua', 'https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://*.svfoundation.org.ua', 'https://*.127.0.0.1']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
