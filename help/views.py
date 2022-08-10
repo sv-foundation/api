@@ -1,9 +1,4 @@
-import base64
 import binascii
-from copy import deepcopy
-
-from django.core.mail import send_mail, EmailMessage
-from django.http import Http404
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
@@ -12,7 +7,6 @@ from rest_framework.views import APIView
 from help.mail_templates.txt_template import HELP_TEMPLATE
 from help.models import HelpRequest
 from help.serializers import HelpRequestSerializer
-from svfoundation import settings
 from help.tasks import send_help_email
 
 

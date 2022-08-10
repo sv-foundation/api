@@ -29,9 +29,10 @@ services:
       - DEBUG=${DEBUG}
       - DB_NAME=svfoundation_db
       - DB_HOST=postgres
-      - DB_POST=5432
+      - DB_PORT=5432
       - DB_USR=postgres
       - DB_PWD=${POSTGRES_PASSWORD}
+      - REDIS_HOST=redis
       - FONDY_MERCHANT_ID=1504162
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
@@ -46,7 +47,7 @@ services:
   redis:
     image: redis:alpine
     restart: always
-  
+
   celery:
     restart: always
     build:
@@ -59,9 +60,10 @@ services:
       - DEBUG=${DEBUG}
       - DB_NAME=svfoundation_db
       - DB_HOST=postgres
-      - DB_POST=5432
+      - DB_PORT=5432
       - DB_USR=postgres
       - DB_PWD=${POSTGRES_PASSWORD}
+      - REDIS_HOST=redis
       - FONDY_MERCHANT_ID=1504162
       - FONDY_KEY=${FONDY_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
