@@ -1,7 +1,7 @@
 name: deploy-production
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/help_email_receivers" ]
   #pull_request:
   #  branches: [ "main" ]
 

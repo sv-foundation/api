@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Document, HelpRequest
+from .models import Document, HelpRequest, HelpEmailReceiver
 from django.contrib.auth.models import Group, User
 
 admin.site.unregister(Group)
@@ -19,3 +19,8 @@ class HelpRequestAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(HelpEmailReceiver)
+class HelpEmailReceiverAdmin(admin.ModelAdmin):
+    list_display = ('email', 'is_active')
