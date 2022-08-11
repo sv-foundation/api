@@ -195,7 +195,8 @@ EMAIL_TIMEOUT = 180
 HELP_EMAIL_RECIPIENTS = ['info@svfoundation.org.ua', 'dianadaieva@gmail.com', 'alexkarn@gmail.com']
 
 # celery
-REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+# REDIS_HOST = env('REDIS_HOST', default='127.0.0.1')
+REDIS_HOST = '127.0.0.1'
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/0'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:6379/0'
 
