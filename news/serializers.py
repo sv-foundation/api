@@ -32,7 +32,9 @@ class NewsDetailsSerializer(serializers.ModelSerializer):
         for tag in soup():
             del tag['style']
         for img in soup.find_all('img'):
-            img['src'] = urljoin(settings.API_URL, img['src'])
+            rel_position = img['src'].find('media')
+            rel_link = img['src'][rel_position:]
+            img['src'] = urljoin(settings.API_URL, rel_link)
         return str(soup)
 
     class Meta:
