@@ -1,11 +1,9 @@
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from news.models import News, NewsTag
 from news.serializers import NewsListSerializer, NewsDetailsSerializer, NewsTagSerializer
