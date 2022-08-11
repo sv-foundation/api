@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from news.serializers import NewsListSerializer, NewsDetailsSerializer, NewsTagS
 
 class NewsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = News.objects.all()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['tags__slug']
     ordering = ('-publication_date', 'id')
 
