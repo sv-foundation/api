@@ -12,9 +12,9 @@ from news.serializers import NewsListSerializer, NewsDetailsSerializer, NewsTagS
 
 class NewsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = News.objects.all()
-    ordering = ('-publication_date', 'id')
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['tags__slug']
+    ordering = ('-publication_date', 'id')
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
