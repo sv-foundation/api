@@ -154,6 +154,7 @@ LANGUAGES = (
     ('uk', gettext('Ukrainian')),
     ('en', gettext('English')),
     ('pl', gettext('Polish')),
+    ('es', gettext('Spanish'))
 )
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
