@@ -157,7 +157,7 @@ LANGUAGES = (
     ('es', gettext('Spanish'))
 )
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
